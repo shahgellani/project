@@ -191,6 +191,7 @@ class UserAccount:
                     elif value == 6:
                         self.change_pin_code()
 
+
                     elif value == 7:
                         self.show_reports()
 

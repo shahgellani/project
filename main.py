@@ -31,6 +31,7 @@ def main_menu():
                     user_pass = input(str("Please Enter user password : "))
                     file = pathlib.Path("accounts.data")
                     if file.exists() and os.stat("accounts.data").st_size != 0:
+
                         infile = open('accounts.data', 'rb')
                         my_list = pickle.load(infile)
                         for item in my_list:
