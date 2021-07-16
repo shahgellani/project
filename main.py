@@ -1,5 +1,10 @@
 # This is a sample Python script.
+import os
+import pathlib
+import pickle
 import admin
+
+import user
 
 
 def main_menu():
@@ -7,6 +12,7 @@ def main_menu():
     It is main menu
     :return:
     """
+    check = True
     while True:
         try:
             value = int(input("Press 1 for Admin: \nPress 2 for User: \nPress 0 to exit() Value = "))
@@ -15,13 +21,33 @@ def main_menu():
                 print("Admin")
                 admin_obj = admin.Admin()
                 while True:
-                    user_name = input(str("Please Enter admin username : "))
-                    user_pass = input(str("Please Enter admin password : "))
-                    admin_obj.login(user_name, user_pass)
+                    admin_user_name = input(str("Please Enter admin username : "))
+                    admin_user_pass = input(str("Please Enter admin password : "))
+                    admin_obj.login(admin_user_name, admin_user_pass)
 
             elif value == 2:
+                while True:
+                    user_id = input(str("Please Enter User ID : "))
+                    user_pass = input(str("Please Enter user password : "))
+                    file = pathlib.Path("accounts.data")
+                    if file.exists() and os.stat("accounts.data").st_size != 0:
+                        infile = open('accounts.data', 'rb')
+                        my_list = pickle.load(infile)
+                        for item in my_list:
+                            if item.user_id == user_id and item.pin == int(user_pass):
+                                check = False
+                                if item.freeze:
+                                    print("Inactive account, PLease contact Admin")
+                                else:
+                                    user_obj = user.UserAccount(user_id=user_id)
+                                    user_obj.user_menu()
+                        infile.close()
+                    if check:
+                        print("Invalid Credentials or User not exists")
+                        break
 
-                print("User")
+
+
 
             elif value == 0:
                 break
