@@ -36,6 +36,7 @@ class UserAccount:
                 self.accNo = item.accNo
                 self.name = item.name
                 self.transaction_limit = item.transaction_limit
+                self.balance = item.balance
 
     def to_write_csv(self, amount, type):
         towrite = "{},{},{},{},{}\n".format(self.user_id, self.name, type, amount, date.today().strftime("%d/%m/%Y"))
@@ -117,6 +118,15 @@ class UserAccount:
                 else:
                     print("PIN mismatched")
 
+
+    def print_statement(self):
+        """
+
+        :return:
+        """
+        print("Account holder name : {}\nAccount No : {}\nBalance : {} ".format(self.name, self.accNo,self.balance))
+        self.print_transaction_history(1000)
+
     def print_transaction_history(self, show=10):
         """
 
@@ -171,15 +181,28 @@ class UserAccount:
                         transfer = True
             # Amount update
             if transfer:
+                # Updating account where amount will be transferred
                 for item in my_list:
-                    if item.accNo != self.accNo and item.accNo == account_no:
-                        item.balance += amount  # Amount added after transfer
+                    if item.accNo != self.accNo and item.accNo == account_no:   # Amount can't transfer to same account
+                        if item.freeze is False:
+                            item.balance += amount  # Amount added after transfer
+                            towrite = "{},{},{},{},{}\n".format(item.user_id, item.name, "TransferCashIn", amount,
+                                                                date.today().strftime("%d/%m/%Y"))
 
+                            transaction_file = open("transactions.csv", 'a')
+                            transaction_file.write(towrite)
+                            transaction_file.close()
+                        else:
+                            print("Frozen Account")
+                            return
+                    else:
+                        print("Amount can't transfer to your own account")
+                # Updating current logged account
                 for item in my_list:
                     if item.accNo == self.accNo:
                         item.balance -= amount  # Amount subtracted from current user's account
                 write_data_infile(my_list)
-                self.to_write_csv(type="Transfer" , amount=amount)
+                self.to_write_csv(type="TransferCashOut", amount=amount)
         except:
             print("Invalid value")
 
@@ -211,7 +234,7 @@ class UserAccount:
                         self.print_transaction_history(1000)
 
                     elif value == 4:
-                        self.print_transaction_history()
+                        self.print_statement()
 
                     elif value == 5:
                         account = False

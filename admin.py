@@ -158,6 +158,7 @@ class Admin:
     def freeze_account(self, user_id):
         """
 
+        :param user_id:
         :param name:
         :return:
         """
@@ -185,11 +186,70 @@ class Admin:
                 print("Record not found")
             write_data_infile(my_list=new_list)
 
+
+    def show_transactions(self):
+        """
+
+        :return:
+        """
+        list_transactions = []
+        try:
+            with open("transactions.csv", mode="r") as file:
+                count = 0
+                for line in file:
+                    list_transactions.append(line.strip('\n'))
+        except FileNotFoundError:
+            print("File of transactions not Found")
+            return
+
+        # Print in the reverse order to show the latest transactions
+        total = len(list_transactions)
+        i = total - 1
+        while i > total - 1000 and i >= 0:
+            print(list_transactions[i])
+            i -= 1
+
+    def show_report(self, input_which, type_report, choice):
+        if choice == 1:
+            action = "Deposit"
+        else:
+            action = "Withdraw"
+
+        if type_report == 0:
+            print("####Day BASED REPORT#####")
+        elif type_report == 1:
+            print("####MONTH BASED REPORT#####")
+        elif type_report == 2:
+            print("####YEAR BASED REPORT#####")
+
+        try:
+            input_data = None
+            file = open("transactions.csv", "r")
+            count = 0
+            for lines in file:
+                tokenized = lines.strip('\n').split(",")
+                if type_report == 0:
+                    input_data = int(tokenized[4].split("/")[0])
+                elif type_report == 1:
+                    input_data = int(tokenized[4].split("/")[1])
+                elif type_report == 2:
+                    input_data = int(tokenized[4].split("/")[2])
+
+                if input_data == input_which and action == tokenized[2]:
+                    print(lines)
+                    count += 1
+
+            if count == 0:
+                print("No Transactions found")
+        except FileNotFoundError:
+            print("No transactions found to generate report")
+
+
     def admin_menu(self):
         """
 
-            :return:
-            """
+        :return:
+        """
         while True:
             try:
                 msg = "Please Enter\n"
@@ -218,34 +278,36 @@ class Admin:
                         self.freeze_account(user_id)
 
                     elif value == 6:
-                        self.show_report()
+                        while 1:
+                            try:
+                                choiceCash = int(input("Enter the type of report:\n1.Cash in\n2.Cash out\n : "))
+                                choice = int(input("1.By Day.\n2.By Month\n3.By year\n4.Exit\nEnter your choice: "))
+                                if choice == 1:
+                                    day = int(input("Enter a day to see the report(1-31): "))
+                                    if day < 1 or day > 31:
+                                        print("Input out of range")
+                                    else:
+                                        self.show_report(day, 0, choiceCash)
+                                elif choice == 2:
+                                    month = int(input("Enter a month to see the report(1-12): "))
+                                    if month < 1 or month > 12:
+                                        print("Input out of range")
+                                    else:
+                                        self.show_report(month, 1, choiceCash)
+                                elif choice == 3:
+                                    year = int(input("Enter a year to see the report: "))
+                                    self.show_report(year, 2, choiceCash)
+                                elif choice == 4:
+                                    break
+                                else:
+                                    print("Wrong input try again")
+                            except ValueError:
+                                print("Only integers allowed")
+
 
                     elif value == 0:
                         return Main.main_menu()
             except ValueError:
                 print("Invalid integer. The number must be in the range of 1-10.")
 
-    def show_transactions(self):
-        """
 
-        :return:
-        """
-        list_transactions = []
-        try:
-            with open("transactions.csv", mode="r") as file:
-                count = 0
-                for line in file:
-                    list_transactions.append(line.strip('\n'))
-        except FileNotFoundError:
-            print("File of transactions not Found")
-            return
-
-        # Print in the reverse order to show the latest transactions
-        total = len(list_transactions)
-        i = total - 1
-        while i > total - 1000 and i >= 0:
-            print(list_transactions[i])
-            i -= 1
-
-    def show_report(self):
-        pass

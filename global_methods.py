@@ -14,6 +14,11 @@ def get_file_data():
 
 
 def write_data_infile(my_list):
+    """
+
+    :param my_list:
+    :return:
+    """
     outfile = open('accounts.data', 'wb')
     pickle.dump(my_list, outfile)
     outfile.close()
