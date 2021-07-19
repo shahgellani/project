@@ -1,7 +1,7 @@
-**Banking System**
+##Banking System
 An OOP based project to store and retrive information of a user's transcations using file system.
 
-**Installing Python**
+##Installing Python
 For MACOS:
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 $ export PATH=/usr/local/bin:/usr/local/sbin:$PATH

@@ -216,11 +216,11 @@ class Admin:
             action = "Withdraw"
 
         if type_report == 0:
-            print("####Day BASED REPORT#####")
+            print("Daily REPORT")
         elif type_report == 1:
-            print("####MONTH BASED REPORT#####")
+            print("Monthly report")
         elif type_report == 2:
-            print("####YEAR BASED REPORT#####")
+            print("#Yearly report")
 
         try:
             input_data = None
@@ -291,7 +291,7 @@ class Admin:
                                 elif choice == 2:
                                     month = int(input("Enter a month to see the report(1-12): "))
                                     if month < 1 or month > 12:
-                                        print("Input out of range")
+                                        print("Input must be  of range")
                                     else:
                                         self.show_report(month, 1, choiceCash)
                                 elif choice == 3:
