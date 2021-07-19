@@ -11,7 +11,7 @@ $ brew install python
 Visit this link for proper guide 
 _https://realpython.com/installing-python/_
 
-Clone the project by typing this command in your terminal
+## Clone the project by typing this command in your terminal
 
 _$ clone https://github.com/shahrukhPhaedrian/project.git_
 
@@ -35,3 +35,4 @@ Class to store all the attributes for the user and contains all the functions re
 ### Admin Class
 Class to handle the task related to user creation , report generation and user account deletion tasks
 ### Main Class
+Main class to manage both classes
