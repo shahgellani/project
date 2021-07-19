@@ -226,7 +226,26 @@ class Admin:
                 print("Invalid integer. The number must be in the range of 1-10.")
 
     def show_transactions(self):
-        pass
+        """
+
+        :return:
+        """
+        list_transactions = []
+        try:
+            with open("transactions.csv", mode="r") as file:
+                count = 0
+                for line in file:
+                    list_transactions.append(line.strip('\n'))
+        except FileNotFoundError:
+            print("File of transactions not Found")
+            return
+
+        # Print in the reverse order to show the latest transactions
+        total = len(list_transactions)
+        i = total - 1
+        while i > total - 1000 and i >= 0:
+            print(list_transactions[i])
+            i -= 1
 
     def show_report(self):
         pass

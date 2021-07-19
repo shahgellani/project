@@ -38,7 +38,7 @@ class UserAccount:
                 self.transaction_limit = item.transaction_limit
 
     def to_write_csv(self, amount, type):
-        towrite = "{},{},{},{},{}\n".format(self.id, self.name, type, amount, date.today().strftime("%d/%m/%Y"))
+        towrite = "{},{},{},{},{}\n".format(self.user_id, self.name, type, amount, date.today().strftime("%d/%m/%Y"))
 
         transaction_file = open("transactions.csv", 'a')
         transaction_file.write(towrite)
@@ -68,13 +68,6 @@ class UserAccount:
         for item in my_list:
             if item.user_id == self.user_id:
                 print("Balance : {}".format(item.balance))
-
-    def print_statement(self):
-        """
-
-        :return:
-        """
-        pass
 
     def with_drwal_amount(self):
         """
@@ -146,7 +139,6 @@ class UserAccount:
         while i > total - show and i >= 0:
             print(list_transactions[i])
             i -= 1
-        pass
 
     def transfer_amount(self, account_no):
         """
@@ -187,15 +179,10 @@ class UserAccount:
                     if item.accNo == self.accNo:
                         item.balance -= amount  # Amount subtracted from current user's account
                 write_data_infile(my_list)
+                self.to_write_csv(type="Transfer" , amount=amount)
         except:
             print("Invalid value")
 
-    def show_reports(self):
-        """
-
-        :return:
-        """
-        pass
 
     def user_menu(self):
         """
@@ -210,8 +197,8 @@ class UserAccount:
 
                 value = int(input("{} 1 for Deposit Amount\n 2 Withdrawal  Amount\n 3 for Show Transactions History\n "
                                   "4 Print Statement \n 5 for Transfer Amount \n "
-                                  "6 for change PIN \n 7 for Reports \n 0 for Main menu \nEnter here : ".format(msg)))
-                if value > 7 or value < 0:
+                                  "6 for change PIN \n 0 for Main menu \nEnter here : ".format(msg)))
+                if value > 6 or value < 0:
                     print("Please Enter valid num from menu")
                 else:
                     if value == 1:
@@ -241,8 +228,7 @@ class UserAccount:
                             continue
                     elif value == 6:
                         self.change_pin_code()
-                    elif value == 7:
-                        self.show_reports()
+
 
                     elif value == 0:
                         return Main.main_menu()
